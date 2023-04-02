@@ -12,7 +12,45 @@
 /* 10 Points */
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
+    if (strcmp(ALUControl, "000") == 0)
+    {
+        *ALUresult = A + B;
+    }
 
+    if (strcmp(ALUControl, "001") == 0)
+    {
+        *ALUresult = A - B;
+    }
+
+    if (strcmp(ALUControl, "010") == 0)
+    {
+        *ALUresult = A < B;
+    }
+
+    if (strcmp(ALUControl, "011") == 0)
+    {
+        *ALUresult = A < B;
+    }
+
+    if (strcmp(ALUControl, "100") == 0)
+    {
+        *ALUresult = A & B;
+    }
+
+    if (strcmp(ALUControl, "101") == 0)
+    {
+        *ALUresult = A | B;
+    }
+
+    if (strcmp(ALUControl, "110") == 0)
+    {
+        B = B << 16;
+    }
+
+    if (strcmp(ALUControl, "111") == 0)
+    {
+        *ALUresult = ~A;
+    }
 }
 
 /* Instruction Fetch */
