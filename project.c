@@ -24,12 +24,12 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 
     if (strcmp(ALUControl, "010") == 0)
     {
-        *ALUresult = A < B;
+        *ALUresult = ((int)A < (int)B) ? 1 : 0;
     }
 
     if (strcmp(ALUControl, "011") == 0)
     {
-        *ALUresult = A < B;
+        *ALUresult = (A < B) ? 1 : 0;
     }
 
     if (strcmp(ALUControl, "100") == 0)
@@ -44,20 +44,29 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 
     if (strcmp(ALUControl, "110") == 0)
     {
-        B = B << 16;
+        *ALUresult = B << 16;
     }
 
     if (strcmp(ALUControl, "111") == 0)
     {
         *ALUresult = ~A;
     }
+
+    *Zero = ((A - B) == 0) ? "1" : "0";
 }
 
 /* Instruction Fetch */
 /* 10 Points */
 int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
-
+    if (PC % 4 == 0)
+    {
+        *instruction = Mem[PC];
+    }
+    else
+    {
+        return 1;
+    }
 }
 
 /* Instruction Partition */
