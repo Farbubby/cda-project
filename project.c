@@ -44,7 +44,7 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 
     if (strcmp(ALUControl, "110") == 0)
     {
-        *ALUresult = B << 16;
+        B = B << 16;
     }
 
     if (strcmp(ALUControl, "111") == 0)
