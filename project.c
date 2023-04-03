@@ -73,7 +73,13 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 /* 10 Points */
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
-
+    *op = (instruction & (63 << 26));
+    *r1 = (instruction & (31 << 21));
+    *r2 = (instruction & (31 << 16));
+    *r3 = (instruction & (31 << 11));
+    *funct = (instruction & 63);
+    *offset = (instruction & 65535);
+    *jsec = (instruction & ~(63 << 26));
 }
 
 /* Instruction Decode */
