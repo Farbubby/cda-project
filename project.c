@@ -13,55 +13,55 @@
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
     // Adds the 2 unsigned ints
-    if (strcmp(ALUControl, "000") == 0)
+    if (ALUControl == '0')
     {
         *ALUresult = A + B;
     }
 
     // Subtracts the 2 unsigned ints
-    else if (strcmp(ALUControl, "001") == 0)
+    else if (ALUControl == '1')
     {
         *ALUresult = A - B;
     }
 
     // Result is 1 if A is less than B, otherwise 0 (A and B are signed ints)
-    else if (strcmp(ALUControl, "010") == 0)
+    else if (ALUControl == '2')
     {
         *ALUresult = (int)A < (int)B;
     }
 
     // Result is 1 if A is less than B, otherwise 0 (A and B are unsigned ints)
-    else if (strcmp(ALUControl, "011") == 0)
+    else if (ALUControl == '3')
     {
         *ALUresult = A < B;
     }
 
     // Uses AND bitwise operator on A and B 
-    else if (strcmp(ALUControl, "100") == 0)
+    else if (ALUControl == '4')
     {
         *ALUresult = A & B;
     }
 
     // Uses OR bitwise operator on A and B 
-    else if (strcmp(ALUControl, "101") == 0)
+    else if (ALUControl == '5')
     {
         *ALUresult = A | B;
     }
 
     // Bit shifts B to the left by 16 bits
-    else if (strcmp(ALUControl, "110") == 0)
+    else if (ALUControl == '6')
     {
         B = B << 16;
     }
 
     // Uses NOT bitwise operator on A
-    else if (strcmp(ALUControl, "111") == 0)
+    else if (ALUControl == '7')
     {
         *ALUresult = ~A;
     }
 
     // Result is 1 if A = B, otherwise 0
-    *Zero = ((A - B) == 0) ? "1" : "0";
+    *Zero = ((A - B) == 0) ? '1' : '0';
 }
 
 /* Instruction Fetch */
@@ -71,7 +71,7 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
     if (PC % 4 == 0)
     {
         // Fetches instruction in memory from PC
-        *instruction = Mem[PC];
+        *instruction = Mem[PC >> 2];
     }
 
     // If PC isn't word aligned (not a multiple of 4)
@@ -102,99 +102,99 @@ int instruction_decode(unsigned op,struct_controls *controls)
     // add, slt, sltu
     if (*op == 0)
     {
-        controls->RegDst = 1;
-        controls->Jump = 0;
-        controls->Branch = 0;
-        controls->MemRead = 0;
-        controls->MemtoReg = 0;
-        controls->ALUOp = 7;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 0;
-        controls->RegWrite = 1;
+        controls->RegDst = '1';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->ALUOp = '7';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '0';
+        controls->RegWrite = '1';
     }
 
     // j
     else if (*op == 2)
     {
-        controls->RegDst = 2;
-        controls->Jump = 1;
-        controls->Branch = 2;
-        controls->MemRead = 0;
-        controls->MemtoReg = 2;
-        controls->ALUOp = 0;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 2;
-        controls->RegWrite = 0;
+        controls->RegDst = '2';
+        controls->Jump = '1';
+        controls->Branch = '2';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->ALUOp = '0';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '2';
+        controls->RegWrite = '0';
     }
 
     // beq
     else if (*op == 4)
     {
-        controls->RegDst = 2;
-        controls->Jump = 0;
-        controls->Branch = 1;
-        controls->MemRead = 0;
-        controls->MemtoReg = 2;
-        controls->ALUOp = 1;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 0;
-        controls->RegWrite = 0;
+        controls->RegDst = '2';
+        controls->Jump = '0';
+        controls->Branch = '1';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->ALUOp = '1';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '0';
+        controls->RegWrite = '0';
     }
 
     // addi
     else if (*op == 8)
     {
-        controls->RegDst = 0;
-        controls->Jump = 0;
-        controls->Branch = 0;
-        controls->MemRead = 0;
-        controls->MemtoReg = 0;
-        controls->ALUOp = 0;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 1;
-        controls->RegWrite = 1;
+        controls->RegDst = '0';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->ALUOp = '0';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '1';
     }
 
     // lui
     else if (*op == 15)
     {
-        controls->RegDst = 0;
-        controls->Jump = 0;
-        controls->Branch = 0;
-        controls->MemRead = 0;
-        controls->MemtoReg = 0;
-        controls->ALUOp = 6;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 1;
-        controls->RegWrite = 1;
+        controls->RegDst = '0';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->ALUOp = '6';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '1';
     }
 
     // lw
     else if (*op == 35)
     {
-        controls->RegDst = 0;
-        controls->Jump = 0;
-        controls->Branch = 0;
-        controls->MemRead = 1;
-        controls->MemtoReg = 1;
-        controls->ALUOp = 0;
-        controls->MemWrite = 0;
-        controls->ALUSrc = 1;
-        controls->RegWrite = 1;
+        controls->RegDst = '0';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '1';
+        controls->MemtoReg = '1';
+        controls->ALUOp = '0';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '1';
     }
 
     // sw
     else if (*op == 43)
     {
-        controls->RegDst = 2;
-        controls->Jump = 0;
-        controls->Branch = 0;
-        controls->MemRead = 0;
-        controls->MemtoReg = 2;
-        controls->ALUOp = 0;
-        controls->MemWrite = 1;
-        controls->ALUSrc = 1;
-        controls->RegWrite = 0;
+        controls->RegDst = '2';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '2';
+        controls->ALUOp = '0';
+        controls->MemWrite = '1';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '0';
     }
     
     // If the instruction is invalid
@@ -218,28 +218,124 @@ void read_register(unsigned r1,unsigned r2,unsigned *Reg,unsigned *data1,unsigne
 /* 10 Points */
 void sign_extend(unsigned offset,unsigned *extended_value)
 {
-    
+    // If the offset value is negative
+    if ((offset >> 15) == 1)
+    {
+        *extended_value = offset | ~65535;
+    }
+
+    // If the offset value is positive
+    else
+    {
+        *extended_value = offset & 65535;
+    }
 }
 
 /* ALU Operations */
 /* 10 Points */
 int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigned funct,char ALUOp,char ALUSrc,unsigned *ALUresult,char *Zero)
 {
+    char ALUControl = ALUOp;
 
+    // R-type instruction only
+    if (ALUOp == '7')
+    {   
+        // add
+        if (funct == 32)
+        {
+            ALUControl = '0';
+        }
+
+        // slt
+        else if (funct == 42)
+        {
+            ALUControl = '2';
+        }
+
+        // sltu
+        else if (funct == 43)
+        {
+            ALUControl = '3';
+        }
+
+        else
+        {
+            return 1;
+        }
+    }
+
+    // Sign extended value for immediates or data2 for other register
+    int value = (ALUSrc == 1) ? *extended_value : *data2;
+
+    ALU(A, value, ALUControl, ALUresult, Zero);
+
+    return 0;
 }
 
 /* Read / Write Memory */
 /* 10 Points */
 int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsigned *memdata,unsigned *Mem)
 {
+    if (MemRead == '1')
+    {   
+        // Memory is word-aligned and to ensure ALUresult isn't out of bounds
+        if (ALUresult % 4 == 0 && ALUresult < 65535)
+        {
+            // Gets value from data memory
+            *memdata = Mem[ALUresult >> 2];
+        }
 
+        else 
+        {
+            return 1;
+        }
+    }
+
+    if (MemWrite == '1')
+    {
+        if (ALUresult % 4 == 0 && ALUresult < 65535)
+        {
+            // Adds value to data memory
+            Mem[ALUresult >> 2] = data2;
+        }
+
+        else 
+        {
+            return 1;
+        }
+    }
+
+    return 0;
 }
 
 /* Write Register */
 /* 10 Points */
 void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,char RegWrite,char RegDst,char MemtoReg,unsigned *Reg)
 {
+    // Write to the register
+    if (RegWrite == '1')
+    {   
+        // Value comes from data memory
+        if (MemtoReg == '1')
+        {
+            Reg[r2] = memdata;
+        }
 
+        // Value comes from ALU
+        else if (MemtoReg == '0')
+        {
+            // Reserved for another register
+            if (RegDst == '1')
+            {
+                Reg[r3] = ALUresult;
+            }
+
+            else if (RegDst == '0')
+            {
+                Reg[r2] = ALUresult;
+            }
+        }
+    }
 }
 
 /* PC Update */
