@@ -12,46 +12,55 @@
 /* 10 Points */
 void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 {
+    // Adds the 2 unsigned ints
     if (strcmp(ALUControl, "000") == 0)
     {
         *ALUresult = A + B;
     }
 
-    if (strcmp(ALUControl, "001") == 0)
+    // Subtracts the 2 unsigned ints
+    else if (strcmp(ALUControl, "001") == 0)
     {
         *ALUresult = A - B;
     }
 
-    if (strcmp(ALUControl, "010") == 0)
+    // Result is 1 if A is less than B, otherwise 0 (A and B are signed ints)
+    else if (strcmp(ALUControl, "010") == 0)
     {
-        *ALUresult = ((int)A < (int)B) ? 1 : 0;
+        *ALUresult = (int)A < (int)B;
     }
 
-    if (strcmp(ALUControl, "011") == 0)
+    // Result is 1 if A is less than B, otherwise 0 (A and B are unsigned ints)
+    else if (strcmp(ALUControl, "011") == 0)
     {
-        *ALUresult = (A < B) ? 1 : 0;
+        *ALUresult = A < B;
     }
 
-    if (strcmp(ALUControl, "100") == 0)
+    // Uses AND bitwise operator on A and B 
+    else if (strcmp(ALUControl, "100") == 0)
     {
         *ALUresult = A & B;
     }
 
-    if (strcmp(ALUControl, "101") == 0)
+    // Uses OR bitwise operator on A and B 
+    else if (strcmp(ALUControl, "101") == 0)
     {
         *ALUresult = A | B;
     }
 
-    if (strcmp(ALUControl, "110") == 0)
+    // Bit shifts B to the left by 16 bits
+    else if (strcmp(ALUControl, "110") == 0)
     {
         B = B << 16;
     }
 
-    if (strcmp(ALUControl, "111") == 0)
+    // Uses NOT bitwise operator on A
+    else if (strcmp(ALUControl, "111") == 0)
     {
         *ALUresult = ~A;
     }
 
+    // Result is 1 if A = B, otherwise 0
     *Zero = ((A - B) == 0) ? "1" : "0";
 }
 
@@ -61,8 +70,11 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
     if (PC % 4 == 0)
     {
+        // Fetches instruction in memory from PC
         *instruction = Mem[PC];
     }
+
+    // If PC isn't word aligned (not a multiple of 4)
     else
     {
         return 1;
@@ -73,6 +85,7 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 /* 10 Points */
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
+    // Uses bitmasking to extract parts of a 32 bit unsigned int
     *op = (instruction & (63 << 26));
     *r1 = (instruction & (31 << 21));
     *r2 = (instruction & (31 << 16));
@@ -85,8 +98,64 @@ void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsi
 /* Instruction Decode */
 /* 15 Points */
 int instruction_decode(unsigned op,struct_controls *controls)
-{
+{   
+    // add, slt, sltu
+    if (*op == 0)
+    {
+        controls->RegDst =
+        controls->Jump =
+        controls->Branch =
+        controls->MemRead =
+        controls->MemtoReg =
+        controls->ALUOp =
+        controls->MemWrite =
+        controls->ALUSrc =
+        controls->RegWrite =
+    }
 
+    // j
+    else if (*op == 2)
+    {
+
+    }
+
+    // beq
+    else if (*op == 4)
+    {
+
+    }
+
+    // addi
+    else if (*op == 8)
+    {
+
+    }
+
+    // lui
+    else if (*op == 15)
+    {
+
+    }
+
+    // lw
+    else if (*op == 35)
+    {
+
+    }
+
+    // sw
+    else if (*op == 43)
+    {
+
+    }
+    
+    // If the instruction is invalid
+    else
+    {
+        return 1;
+    }
+
+    return 0;
 }
 
 /* Read Register */
