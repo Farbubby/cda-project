@@ -342,5 +342,18 @@ void write_register(unsigned r2,unsigned r3,unsigned memdata,unsigned ALUresult,
 /* 10 Points */
 void PC_update(unsigned jsec,unsigned extended_value,char Branch,char Jump,char Zero,unsigned *PC)
 {
+    *PC += 4;
+
+    // Branching leads to these calculations
+    if (Zero == '1' && Branch == '1')
+    {
+        *PC += (extended_value << 2);
+    }
+
+    // Jumping leads to these calculations
+    if (Jump == '1')
+    {
+        *PC = (*PC & 4026531840) | (jsec << 2);
+    }
 
 }
