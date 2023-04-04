@@ -278,7 +278,7 @@ int rw_memory(unsigned ALUresult,unsigned data2,char MemWrite,char MemRead,unsig
 {
     if (MemRead == '1')
     {   
-        // Memory is word-aligned and to ensure ALUresult isn't out of bounds
+        // Memory is word-aligned and to ensure ALUresult isn't out of bounds (65535 = FFFF)
         if (ALUresult % 4 == 0 && ALUresult < 65535)
         {
             // Gets value from data memory
