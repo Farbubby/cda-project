@@ -100,7 +100,7 @@ void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsi
 int instruction_decode(unsigned op,struct_controls *controls)
 {   
     // add, slt, sltu
-    if (*op == 0)
+    if (op == 0)
     {
         controls->RegDst = '1';
         controls->Jump = '0';
@@ -114,7 +114,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // j
-    else if (*op == 2)
+    else if (op == 2)
     {
         controls->RegDst = '2';
         controls->Jump = '1';
@@ -128,7 +128,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // beq
-    else if (*op == 4)
+    else if (op == 4)
     {
         controls->RegDst = '2';
         controls->Jump = '0';
@@ -142,7 +142,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // addi
-    else if (*op == 8)
+    else if (op == 8)
     {
         controls->RegDst = '0';
         controls->Jump = '0';
@@ -156,7 +156,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // lui
-    else if (*op == 15)
+    else if (op == 15)
     {
         controls->RegDst = '0';
         controls->Jump = '0';
@@ -170,7 +170,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // lw
-    else if (*op == 35)
+    else if (op == 35)
     {
         controls->RegDst = '0';
         controls->Jump = '0';
@@ -184,7 +184,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // sw
-    else if (*op == 43)
+    else if (op == 43)
     {
         controls->RegDst = '2';
         controls->Jump = '0';
@@ -265,9 +265,9 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
     }
 
     // Sign extended value for immediates or data2 for other register
-    int value = (ALUSrc == 1) ? *extended_value : *data2;
+    unsigned value = (ALUSrc == 1) ? extended_value : data2;
 
-    ALU(A, value, ALUControl, ALUresult, Zero);
+    ALU(data1, value, ALUControl, ALUresult, Zero);
 
     return 0;
 }
