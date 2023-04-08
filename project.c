@@ -71,6 +71,7 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
     if (PC % 4 == 0)
     {
         // Fetches instruction in memory from PC
+        // Divides PC by 4 (>> 2) to get Mem[1], Mem[2], Mem[3], etc
         *instruction = Mem[PC >> 2];
     }
 
