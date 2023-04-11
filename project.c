@@ -87,10 +87,10 @@ int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 void instruction_partition(unsigned instruction, unsigned *op, unsigned *r1,unsigned *r2, unsigned *r3, unsigned *funct, unsigned *offset, unsigned *jsec)
 {
     // Uses bitmasking to extract parts of a 32 bit unsigned int
-    *op = (instruction & (63 << 26));
-    *r1 = (instruction & (31 << 21));
-    *r2 = (instruction & (31 << 16));
-    *r3 = (instruction & (31 << 11));
+    *op = (instruction & (63 << 26)) >> 26;
+    *r1 = (instruction & (31 << 21)) >> 21;
+    *r2 = (instruction & (31 << 16)) >> 16;
+    *r3 = (instruction & (31 << 11)) >> 11;
     *funct = (instruction & 63);
     *offset = (instruction & 65535);
     *jsec = (instruction & ~(63 << 26));
@@ -156,6 +156,34 @@ int instruction_decode(unsigned op,struct_controls *controls)
         controls->RegWrite = '1';
     }
 
+    // slti
+    else if (op == 10)
+    {
+        controls->RegDst = '0';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->ALUOp = '2';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '1';
+    }
+
+    // sltiu
+    else if (op == 11)
+    {
+        controls->RegDst = '0';
+        controls->Jump = '0';
+        controls->Branch = '0';
+        controls->MemRead = '0';
+        controls->MemtoReg = '0';
+        controls->ALUOp = '3';
+        controls->MemWrite = '0';
+        controls->ALUSrc = '1';
+        controls->RegWrite = '1';
+    }
+
     // lui
     else if (op == 15)
     {
@@ -171,7 +199,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     }
 
     // lw
-    else if (op == 35)
+    else if (op == 34)
     {
         controls->RegDst = '0';
         controls->Jump = '0';
