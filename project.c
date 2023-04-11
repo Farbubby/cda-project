@@ -68,7 +68,7 @@ void ALU(unsigned A,unsigned B,char ALUControl,unsigned *ALUresult,char *Zero)
 /* 10 Points */
 int instruction_fetch(unsigned PC,unsigned *Mem,unsigned *instruction)
 {
-    if (PC % 4 == 0)
+    if (PC % 4 == 0 && PC < 65535)
     {
         // Fetches instruction in memory from PC
         // Divides PC by 4 (>> 2) to get Mem[1], Mem[2], Mem[3], etc
@@ -119,7 +119,7 @@ int instruction_decode(unsigned op,struct_controls *controls)
     {
         controls->RegDst = '2';
         controls->Jump = '1';
-        controls->Branch = '2';
+        controls->Branch = '0';
         controls->MemRead = '0';
         controls->MemtoReg = '2';
         controls->ALUOp = '0';
@@ -245,6 +245,24 @@ int ALU_operations(unsigned data1,unsigned data2,unsigned extended_value,unsigne
         if (funct == 32)
         {
             ALUControl = '0';
+        }
+
+        // sub
+        if (funct == 34)
+        {
+            ALUControl = '1';
+        }
+
+        // and
+        if (funct == 36)
+        {
+            ALUControl = '4';
+        }
+
+        // or
+        if (funct == 37)
+        {
+            ALUControl = '5';
         }
 
         // slt
